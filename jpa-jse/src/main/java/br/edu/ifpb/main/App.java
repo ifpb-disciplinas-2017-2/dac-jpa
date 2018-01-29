@@ -1,6 +1,9 @@
 package br.edu.ifpb.main;
 
 import br.edu.ifpb.domain.Aluno;
+import br.edu.ifpb.domain.Professor;
+import br.edu.ifpb.domain.Sexo;
+import br.edu.ifpb.domain.Tecnico;
 import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityTransaction;
@@ -17,23 +20,25 @@ public class App {
         EntityManager em = Persistence
                 .createEntityManagerFactory("ExemploPU")
                 .createEntityManager();
-
-//        Aluno a = new Aluno("kiko", "123");
+        Professor prof = new Professor("Job", "312331");
+        Tecnico tec = new Tecnico("Madruga", "7657");
+        Aluno a = new Aluno("kiko", "123");
+        a.setSexo(Sexo.MASCULIN);
 //        a.setCodigo((int) System.currentTimeMillis());
-//           EntityTransaction transaction = em.getTransaction();
-//        transaction.begin();
-//        em.persist(a);
-//        transaction.commit();
-        List<Aluno> resultList = em.createQuery("SELECT a FROM Aluno a", Aluno.class).getResultList();
-        resultList.forEach(aluno -> System.out.println(aluno.getNome()));
-
-        Aluno a = em.find(Aluno.class, 1);
-        a.setNome("Madruga");
-
         EntityTransaction transaction = em.getTransaction();
         transaction.begin();
-        em.merge(a);
+        em.persist(a);
         transaction.commit();
+//        List<Aluno> resultList = em.createQuery("SELECT a FROM Aluno a", Aluno.class).getResultList();
+//        resultList.forEach(aluno -> System.out.println(aluno.getNome()));
+//
+//        Aluno aluno = em.find(Aluno.class, 1);
+//        System.out.println(aluno.getSexo());
+//        a.setNome("Madruga");
 
+//        EntityTransaction transaction = em.getTransaction();
+//        transaction.begin();
+//        em.merge(a);
+//        transaction.commit();
     }
 }
