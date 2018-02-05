@@ -9,6 +9,7 @@
     <modules>
         <module>jpa-web</module>
         <module>jpa-jse</module>
+        <module>jpa-mapeamento</module>
     </modules>
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>

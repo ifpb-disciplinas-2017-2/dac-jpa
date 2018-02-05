@@ -1,7 +1,9 @@
 package br.edu.ifpb.domain;
 
 import java.io.Serializable;
+import javax.persistence.AttributeOverride;
 import javax.persistence.Column;
+import javax.persistence.Embedded;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -24,6 +26,13 @@ public class Tecnico implements Serializable {
     private String nome;
     @Column(name = "mat_siape", length = 25, nullable = true)
     private String siape;
+    @Embedded
+    @AttributeOverride(name = "numero", column = @Column(name = "cpf", length = 11))
+    // 123.123.123-09
+    private CPF cpf = new CPF("12312312331");
+
+    @Embedded
+    private Endereco endereco;
 
     public Tecnico() {
     }
@@ -57,4 +66,26 @@ public class Tecnico implements Serializable {
         this.siape = siape;
     }
 
+//    public String getCpf() {
+//        return cpf;
+//    }
+//
+//    public void setCpf(String cpf) {
+//        this.cpf = cpf;
+//    }
+    public CPF getCpf() {
+        return cpf;
+    }
+
+    public void setCpf(CPF cpf) {
+        this.cpf = cpf;
+    }
+
+    public Endereco getEndereco() {
+        return endereco;
+    }
+
+    public void setEndereco(Endereco endereco) {
+        this.endereco = endereco;
+    }
 }
