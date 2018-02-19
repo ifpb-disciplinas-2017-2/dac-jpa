@@ -7,12 +7,14 @@
     <class>br.edu.ifpb.domain.Dependente</class>
     <class>br.edu.ifpb.domain.Departamento</class>
     <class>br.edu.ifpb.domain.Projeto</class>
+    <class>br.edu.ifpb.domain.Gerente</class>
     <properties>
       <property name="javax.persistence.jdbc.url" value="jdbc:postgresql://localhost:5432/jpa-jse"/>
       <property name="javax.persistence.jdbc.user" value="postgres"/>
       <property name="javax.persistence.jdbc.driver" value="org.postgresql.Driver"/>
       <property name="javax.persistence.jdbc.password" value="12345"/>
-      <property name="javax.persistence.schema-generation.database.action" value="drop-and-create"/>
+      <property name="javax.persistence.schema-generation.database.action" value="none"/>
+      <!--<property name="eclipselink.logging.level" value="FINE"/>-->
     </properties>
   </persistence-unit>
   <persistence-unit name="DEFAULT_PU" transaction-type="RESOURCE_LOCAL">

@@ -40,7 +40,7 @@ public class Funcionario {
     private Endereco endereco;
 
     // 1-N
-    @OneToMany
+    @OneToMany()
     @JoinColumn(name = "id_funcionario")
     private Set<Dependente> dependentes = new HashSet<>();
 

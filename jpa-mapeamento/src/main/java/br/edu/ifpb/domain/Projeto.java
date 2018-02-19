@@ -5,6 +5,7 @@ import java.util.Objects;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.ManyToOne;
 
 /**
  * @author Ricardo Job
@@ -19,6 +20,9 @@ public class Projeto implements Serializable {
     private int id;
 
     private String descricao;
+    
+    @ManyToOne
+    private Gerente gerente; // *-1 bidirecional
 
     public Projeto() {
     }
@@ -42,6 +46,15 @@ public class Projeto implements Serializable {
     public void setDescricao(String descricao) {
         this.descricao = descricao;
     }
+
+    public Gerente getGerente() {
+        return gerente;
+    }
+
+    public void setGerente(Gerente gerente) {
+        this.gerente = gerente;
+    }
+    
 
     @Override
     public int hashCode() {
