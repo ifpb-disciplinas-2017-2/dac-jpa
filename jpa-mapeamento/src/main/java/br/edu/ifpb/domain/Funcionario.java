@@ -50,7 +50,9 @@ public class Funcionario {
 
     // N-N
     @ManyToMany
-    @JoinTable(name = "Trabalho")
+    @JoinTable(name = "Trabalho",
+            joinColumns = @JoinColumn(name = "func_id"),
+            inverseJoinColumns = @JoinColumn(name = "proj_id"))
     private List<Projeto> projetos = new ArrayList<>();
 
     public Funcionario() {

@@ -1,6 +1,8 @@
 package br.edu.ifpb.main;
 
 import br.edu.ifpb.domain.Departamento;
+import br.edu.ifpb.domain.Endereco;
+import br.edu.ifpb.domain.Funcionario;
 import br.edu.ifpb.domain.Gerente;
 import br.edu.ifpb.domain.Projeto;
 import javax.persistence.EntityManager;
@@ -23,7 +25,8 @@ public class AppBidirecional {
 //        salvarDepartamentoGerente(transaction, em);
 //        localizandoDepartamentoGerente(em);
 //        atualizarNomeGerente(transaction, em);
-        salvarProjetoGerente(transaction, em);
+//        salvarProjetoGerente(transaction, em);
+        salvarProjetoFuncionario(transaction, em);
 
     }
 
@@ -70,6 +73,28 @@ public class AppBidirecional {
         em.persist(etapa1);
         em.persist(etapa2);
         em.persist(gerente);
+        transaction.commit();
+
+    }
+
+    private static void salvarProjetoFuncionario(EntityTransaction transaction, EntityManager em) {
+        Projeto etapa1 = new Projeto("Etapa 1");
+        Endereco endereco = new Endereco("a", "b", "c");
+        Funcionario kiko = new Funcionario("Kiko", "123", endereco);
+        Funcionario chaves = new Funcionario("Chaves", "124", endereco);
+        
+        etapa1.novoFuncionario(kiko);
+        etapa1.novoFuncionario(chaves);
+        kiko.novoProjeto(etapa1);
+        chaves.novoProjeto(etapa1);
+        
+        
+        
+        transaction.begin();
+        em.persist(endereco);
+        em.persist(kiko);
+        em.persist(chaves);
+        em.persist(etapa1);
         transaction.commit();
 
     }

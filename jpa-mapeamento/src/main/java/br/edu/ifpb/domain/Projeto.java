@@ -1,10 +1,13 @@
 package br.edu.ifpb.domain;
 
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 
 /**
@@ -20,15 +23,26 @@ public class Projeto implements Serializable {
     private int id;
 
     private String descricao;
-    
+
     @ManyToOne
     private Gerente gerente; // *-1 bidirecional
+
+    @ManyToMany(mappedBy = "projetos")
+    private List<Funcionario> funcionarios = new ArrayList<>();
 
     public Projeto() {
     }
 
     public Projeto(String descricao) {
         this.descricao = descricao;
+    }
+
+    public void novoFuncionario(Funcionario funcionario) {
+        this.funcionarios.add(funcionario);
+    }
+
+    public void excluirFuncionario(Funcionario funcionario) {
+        this.funcionarios.remove(funcionario);
     }
 
     public int getId() {
@@ -54,7 +68,6 @@ public class Projeto implements Serializable {
     public void setGerente(Gerente gerente) {
         this.gerente = gerente;
     }
-    
 
     @Override
     public int hashCode() {
