@@ -39,7 +39,7 @@ public class ExecutorQueryAula {
 //        consultarNumeroDeTodosOsDependentes(em);
 //        consultarNomeDoEmpregadoEQuantidadeDependentes(em);
 //        consultarEmpregadoComIdSuperiorAMedia(em);
-//        consultarEmpregadoSeTodosIdSuperiorADez(em);
+        consultarEmpregadoSeTodosIdSuperiorADez(em);
 //        consultarEmpregadoSeQualquerIdSuperiorADez(em);
 //        consultarEmpregadoComDependentesInicandoComM(em);
 //        atualizarNomeTodosDependentes(em);
@@ -182,5 +182,121 @@ public class ExecutorQueryAula {
             System.out.print(coluna[0]);
             System.out.println(" - " + coluna[1]);
         }
+    }
+
+    private static void consultarDependentesComIdEntre(EntityManager em) {
+        // SELECT * FROM Dependente d WHERE d.id>=0 AND d.id<=20
+        int inicio = 4;
+        int fim = 20;
+        String jpql = "SELECT d FROM Dependente d WHERE (d.id-1) >=:inicio AND d.id<=:fim";
+        TypedQuery<Dependente> query = em.createQuery(jpql, Dependente.class);
+        query.setParameter("inicio", inicio);
+        query.setParameter("fim", fim);
+        List<Dependente> lista = query.getResultList();
+        lista.forEach(dep -> System.out.println(dep.getId() + " - " + dep.getNome()));
+
+    }
+
+    private static void consultarDependentesComIdEntreBETWEEN(EntityManager em) {
+        int inicio = 5;
+        int fim = 20;
+        String jpql = "SELECT d FROM Dependente d WHERE d.id BETWEEN :inicio AND :fim";
+        TypedQuery<Dependente> query = em.createQuery(jpql, Dependente.class);
+        query.setParameter("inicio", inicio);
+        query.setParameter("fim", fim);
+        List<Dependente> lista = query.getResultList();
+        lista.forEach(dep -> System.out.println(dep.getId() + " - " + dep.getNome()));
+    }
+
+    private static void consultarDependentesComIdForaBETWEEN(EntityManager em) {
+        int inicio = 6;
+        int fim = 20;
+        String jpql = "SELECT d FROM Dependente d WHERE d.id NOT BETWEEN :inicio AND :fim";
+        TypedQuery<Dependente> query = em.createQuery(jpql, Dependente.class);
+        query.setParameter("inicio", inicio);
+        query.setParameter("fim", fim);
+        List<Dependente> lista = query.getResultList();
+        lista.forEach(dep -> System.out.println(dep.getId() + " - " + dep.getNome()));
+    }
+
+    private static void consultarEmpregadoSemFaculdade(EntityManager em) {
+        String jpql = "SELECT e FROM Empregado e WHERE e.faculdade IS NULL";
+        TypedQuery<Empregado> query = em.createQuery(jpql, Empregado.class);
+        List<Empregado> resultList = query.getResultList();
+        for (Empregado empregado : resultList) {
+            System.out.println(empregado.getNome());
+//            System.out.println(empregado.getFaculdade().getDescricao());
+        }
+    }
+
+    private static void consultarEmpregadoComFaculdade(EntityManager em) {
+//        String jpql = "SELECT e FROM Empregado e WHERE e.faculdade NOT IS NULL";
+        String jpql = "SELECT e FROM Empregado e WHERE e.faculdade IS NOT NULL";
+        TypedQuery<Empregado> query = em.createQuery(jpql, Empregado.class);
+        List<Empregado> resultList = query.getResultList();
+        for (Empregado empregado : resultList) {
+            System.out.println(empregado.getNome());
+            System.out.println(empregado.getFaculdade().getDescricao());
+        }
+    }
+
+    private static void consultarEmpregadoPossuiDependente(EntityManager em) {
+        String jpql = "SELECT e FROM Empregado e WHERE e.dependentes IS NOT EMPTY";
+        TypedQuery<Empregado> query = em.createQuery(jpql, Empregado.class);
+        List<Empregado> resultList = query.getResultList();
+        for (Empregado empregado : resultList) {
+            System.out.println(empregado.getNome() + " " + empregado.getDependentes().size());
+
+        }
+    }
+
+    private static void consultarEmpregadoDependenteComNome(EntityManager em) {
+        //Selecionar os empregados que possuem dependentes que começam com a letra M
+        String jpql = "SELECT UPPER(e.nome) FROM Empregado e, Dependente d WHERE d MEMBER OF e.dependentes "
+                + " AND LOWER(d.nome) LIKE 'm%' ";
+        TypedQuery<String> query = em.createQuery(jpql, String.class);
+        query.getResultList().forEach(System.out::println);
+    }
+
+    private static void consultarPrimeiraLetraDependente(EntityManager em) {
+        //Selecionar apenas a primeira letra do nome dos dependentes
+        String jpql = "SELECT SUBSTRING(d.nome, 1, 1) FROM Dependente d ORDER BY d.nome";
+        TypedQuery<String> query = em.createQuery(jpql, String.class);
+        query.getResultList().forEach(System.out::println);
+//        query.getResultList().forEach(nome->{System.out.println(nome.substring(0, 1));});
+    }
+
+    private static void consultarNumeroDeTodosOsDependentes(EntityManager em) {
+        String jqpl = "SELECT COUNT(d) FROM Dependente d";
+        TypedQuery<Long> createQuery = em.createQuery(jqpl, Long.class);
+        Long total = createQuery.getSingleResult();
+        System.out.println("total = " + total);
+    }
+
+    private static void consultarNomeDoEmpregadoEQuantidadeDependentes(EntityManager em) {
+        String jpql = "SELECT e.nome, COUNT(d) FROM Empregado e LEFT JOIN e.dependentes d GROUP BY e.nome";
+        Query query = em.createQuery(jpql);
+        List<Object[]> lista = query.getResultList();
+        for (Object[] coluna : lista) {
+            System.out.print(coluna[0]);
+            System.out.println(" - " + coluna[1]);
+        }
+    }
+
+    private static void consultarEmpregadoComIdSuperiorAMedia(EntityManager em) {
+        String jpql = " SELECT e FROM Empregado e WHERE e.id> (SELECT AVG(emp.id) FROM Empregado emp)";
+        TypedQuery<Empregado> createQuery = em.createQuery(jpql, Empregado.class);
+        List<Empregado> resultList = createQuery.getResultList();
+        resultList.forEach(e -> System.out.println(e.getNome()));
+
+    }
+
+    private static void consultarEmpregadoSeTodosIdSuperiorADez(EntityManager em) {
+//        String jpql = " SELECT e FROM Empregado e WHERE (SELECT COUNT(emp.id) FROM Empregado emp) = "
+//                + "(SELECT COUNT(x) FROM Empregado x WHERE x.id>0)";
+        String jpql = " SELECT e FROM Empregado e WHERE 10 < ALL (SELECT emp.id FROM Empregado emp)";
+        TypedQuery<Empregado> createQuery = em.createQuery(jpql, Empregado.class);
+        List<Empregado> resultList = createQuery.getResultList();
+        resultList.forEach(e -> System.out.println(e.getNome()));
     }
 }
